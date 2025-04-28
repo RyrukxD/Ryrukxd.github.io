@@ -16,7 +16,7 @@
   <script>
     // Fetch NASDAQ data (example: AAPL)
     async function fetchStockData() {
-  const API_URL = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=ND&apikey=YOUR_KEY';
+  const API_URL = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=NQ&apikey=YOUR_KEY';
   const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // Or another proxy
   const response = await fetch(proxyUrl + API_URL);
   const data = await response.json();
