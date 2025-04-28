@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>NASDAQ Chart</title>
+  <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+  <style>
+    #chart-container {
+      width: 100%;
+      height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <div id="chart-container"></div>
+  
+  <script>
+    // Fetch NASDAQ data (example: AAPL)
+    async function fetchStockData() {
+      const response = await fetch('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&apikey=YOUR_API_KEY');
+      const data = await response.json();
+      
+      // Format data for Lightweight Charts
+      const prices = Object.entries(data["Time Series (Daily)"]).map(([date, values]) => ({
+        time: date,
+        open: parseFloat(values["1. open"]),
+        high: parseFloat(values["2. high"]),
+        low: parseFloat(values["3. low"]),
+        close: parseFloat(values["4. close"]),
+      }));
+      
+      return prices.reverse(); // Sort oldest to newest
+    }
+
+    // Create the chart
+    async function createChart() {
+      const chartData = await fetchStockData();
+      
+      const chart = LightweightCharts.createChart(
+        document.getElementById('chart-container'),
+        { width: 800, height: 500 }
+      );
+      
+      const candlestickSeries = chart.addCandlestickSeries();
+      candlestickSeries.setData(chartData);
+      
+      // Optional: Add moving average
+      const closePrices = chartData.map(d => ({ time: d.time, value: d.close }));
+      const lineSeries = chart.addLineSeries({ color: 'blue', lineWidth: 1 });
+      lineSeries.setData(closePrices);
+    }
+
+    createChart();
+  </script>
+</body>
+</html>
