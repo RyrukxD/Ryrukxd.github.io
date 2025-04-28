@@ -16,8 +16,10 @@
   <script>
     // Fetch NASDAQ data (example: AAPL)
     async function fetchStockData() {
-      const response = await fetch('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&apikey=U5YYMQUDGQF9J4QU');
-      const data = await response.json();
+  const API_URL = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&apikey=YOUR_KEY';
+  const proxyUrl = 'https://cors-anywhere.herokuapp.com/'; // Or another proxy
+  const response = await fetch(proxyUrl + API_URL);
+  const data = await response.json();
       
       // Format data for Lightweight Charts
       const prices = Object.entries(data["Time Series (Daily)"]).map(([date, values]) => ({
